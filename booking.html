@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book Now &mdash; The Roofing Company</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="index.html" class="nav-logo">The <span>Roofing</span> Company</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="booking.html" class="active">Book Now</a></li>
+      <li><a href="reviews.html">Reviews</a></li>
+    </ul>
+  </nav>
+
+  <!-- Page Header -->
+  <header class="page-header">
+    <h1>Request a Quote</h1>
+    <p>Fill in the form below and we&rsquo;ll get back to you within 24 hours</p>
+  </header>
+
+  <!-- Booking Section -->
+  <section class="booking-section">
+
+    <!-- Form -->
+    <div class="form-card" id="bookingForm">
+      <form id="quoteForm" novalidate>
+
+        <!-- Service -->
+        <div class="form-group">
+          <label for="service">Service Required</label>
+          <div class="select-wrap">
+            <select id="service" required>
+              <option value="" disabled selected>Select a service&hellip;</option>
+              <option value="Roof Repairs">Roof Repairs</option>
+              <option value="New Roofs">New Roofs</option>
+              <option value="Flat Roofing">Flat Roofing</option>
+              <option value="Guttering">Guttering</option>
+              <option value="Chimney Work">Chimney Work</option>
+              <option value="Ridge Tiles">Ridge Tiles</option>
+              <option value="Fascias and Soffits">Fascias and Soffits</option>
+              <option value="Roof Inspections">Roof Inspections</option>
+            </select>
+          </div>
+          <div class="error-msg" id="service-error">Please select a service.</div>
+        </div>
+
+        <!-- Date & Time -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="date">Preferred Date</label>
+            <input type="date" id="date" required />
+            <div class="error-msg" id="date-error">Please choose a date.</div>
+          </div>
+          <div class="form-group">
+            <label for="time">Preferred Time</label>
+            <div class="select-wrap">
+              <select id="time" required>
+                <option value="" disabled selected>Select a time&hellip;</option>
+                <option>08:00 AM</option>
+                <option>09:00 AM</option>
+                <option>10:00 AM</option>
+                <option>11:00 AM</option>
+                <option>12:00 PM</option>
+                <option>01:00 PM</option>
+                <option>02:00 PM</option>
+                <option>03:00 PM</option>
+                <option>04:00 PM</option>
+                <option>05:00 PM</option>
+              </select>
+            </div>
+            <div class="error-msg" id="time-error">Please select a time.</div>
+          </div>
+        </div>
+
+        <!-- Name & Email -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" placeholder="e.g. John Smith" required />
+            <div class="error-msg" id="name-error">Please enter your full name.</div>
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" placeholder="you@example.com" required />
+            <div class="error-msg" id="email-error">Please enter a valid email address.</div>
+          </div>
+        </div>
+
+        <!-- Phone -->
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" placeholder="e.g. 07700 900000" required />
+          <div class="error-msg" id="phone-error">Please enter a valid phone number.</div>
+          <div class="form-note">We&rsquo;ll use this to confirm your appointment.</div>
+        </div>
+
+        <!-- Details -->
+        <div class="form-group">
+          <label for="details">Additional Details <span style="font-weight:300;text-transform:none;letter-spacing:0;">(optional)</span></label>
+          <textarea id="details" placeholder="Tell us more about the job &mdash; size of roof, age of property, any known issues&hellip;"></textarea>
+        </div>
+
+        <div style="margin-top:2rem;">
+          <button type="submit" class="btn-red" style="width:100%;padding:1rem;font-size:0.9rem;">Submit Enquiry</button>
+        </div>
+
+      </form>
+    </div>
+
+    <!-- Success state -->
+    <div class="booking-success" id="bookingSuccess">
+      <div class="success-icon">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h2>Enquiry Received!</h2>
+      <p>Thank you &mdash; we&rsquo;ve got your request and will be in touch within 24 hours to confirm your appointment.</p>
+      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+        <a href="booking.html" class="btn-red">Submit Another</a>
+        <a href="index.html" class="btn-outline">Back to Home</a>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div>
+      <div class="footer-logo">The <span>Roofing</span> Company</div>
+      <div class="footer-tagline">Covering London &amp; Surrounding Areas</div>
+      <div class="footer-copy">&copy; 2026 The Roofing Company. All rights reserved.</div>
+    </div>
+    <ul class="footer-nav">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="booking.html">Book Now</a></li>
+      <li><a href="reviews.html">Reviews</a></li>
+    </ul>
+  </footer>
+
+  <script>
+    // Pre-select service from URL param
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      var svc = params.get('service');
+      if (svc) {
+        var sel = document.getElementById('service');
+        for (var i = 0; i < sel.options.length; i++) {
+          if (sel.options[i].value === svc) { sel.selectedIndex = i; break; }
+        }
+      }
+      // Set min date to today
+      document.getElementById('date').min = new Date().toISOString().split('T')[0];
+    })();
+
+    // Validation helpers
+    function setError(id, errId, show) {
+      var el = document.getElementById(id);
+      var err = document.getElementById(errId);
+      if (show) {
+        el.classList.add('error');
+        err.style.display = 'block';
+      } else {
+        el.classList.remove('error');
+        err.style.display = 'none';
+      }
+    }
+
+    // Clear errors on input
+    ['service','date','time','name','email','phone'].forEach(function (id) {
+      var el = document.getElementById(id);
+      ['input','change'].forEach(function (ev) {
+        el.addEventListener(ev, function () {
+          el.classList.remove('error');
+          var err = document.getElementById(id + '-error');
+          if (err) err.style.display = 'none';
+        });
+      });
+    });
+
+    // Form submit
+    document.getElementById('quoteForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var valid = true;
+
+      if (!document.getElementById('service').value) {
+        setError('service', 'service-error', true); valid = false;
+      } else { setError('service', 'service-error', false); }
+
+      if (!document.getElementById('date').value) {
+        setError('date', 'date-error', true); valid = false;
+      } else { setError('date', 'date-error', false); }
+
+      if (!document.getElementById('time').value) {
+        setError('time', 'time-error', true); valid = false;
+      } else { setError('time', 'time-error', false); }
+
+      var name = document.getElementById('name').value.trim();
+      if (name.length < 2) {
+        setError('name', 'name-error', true); valid = false;
+      } else { setError('name', 'name-error', false); }
+
+      var email = document.getElementById('email').value.trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        setError('email', 'email-error', true); valid = false;
+      } else { setError('email', 'email-error', false); }
+
+      var phone = document.getElementById('phone').value.trim();
+      if (!/^[\d\s\+\-\(\)]{7,}$/.test(phone)) {
+        setError('phone', 'phone-error', true); valid = false;
+      } else { setError('phone', 'phone-error', false); }
+
+      if (!valid) return;
+
+      // Show success
+      document.getElementById('bookingForm').style.display = 'none';
+      var success = document.getElementById('bookingSuccess');
+      success.style.display = 'block';
+      success.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  </script>
+
+</body>
+</html>

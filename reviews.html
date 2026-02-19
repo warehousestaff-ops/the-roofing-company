@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reviews &mdash; The Roofing Company</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="index.html" class="nav-logo">The <span>Roofing</span> Company</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="booking.html">Book Now</a></li>
+      <li><a href="reviews.html" class="active">Reviews</a></li>
+    </ul>
+  </nav>
+
+  <!-- Page Header -->
+  <header class="page-header">
+    <h1>Customer Reviews</h1>
+    <p>What our customers across London say about our work</p>
+  </header>
+
+  <!-- Reviews Page -->
+  <div class="reviews-page">
+    <div class="reviews-layout">
+
+      <!-- Left: reviews list -->
+      <div class="reviews-column">
+        <div class="reviews-col-title">What Our Customers Say</div>
+        <div class="reviews-count" id="reviewsCount"></div>
+        <div class="reviews-list" id="reviewsList"></div>
+      </div>
+
+      <!-- Right: leave a review form -->
+      <div class="form-column">
+        <div class="review-form-card">
+          <div class="form-col-title">Leave a Review</div>
+
+          <form id="reviewForm" novalidate>
+
+            <div class="form-group">
+              <label for="reviewName">Your Name</label>
+              <input type="text" id="reviewName" placeholder="e.g. John Smith" required />
+              <div class="error-msg" id="name-error">Please enter your name.</div>
+            </div>
+
+            <div class="form-group">
+              <label>Star Rating</label>
+              <div class="star-picker" id="starPicker" role="group" aria-label="Choose a star rating">
+                <span class="star-pick" data-value="1" tabindex="0" role="radio" aria-label="1 star">&#9733;</span>
+                <span class="star-pick" data-value="2" tabindex="0" role="radio" aria-label="2 stars">&#9733;</span>
+                <span class="star-pick" data-value="3" tabindex="0" role="radio" aria-label="3 stars">&#9733;</span>
+                <span class="star-pick" data-value="4" tabindex="0" role="radio" aria-label="4 stars">&#9733;</span>
+                <span class="star-pick" data-value="5" tabindex="0" role="radio" aria-label="5 stars">&#9733;</span>
+              </div>
+              <div class="rating-error" id="rating-error">Please select a star rating.</div>
+            </div>
+
+            <div class="form-group">
+              <label for="reviewComment">Your Review</label>
+              <textarea id="reviewComment" placeholder="Tell us about your experience&hellip;" required></textarea>
+              <div class="error-msg" id="comment-error">Please write a short review.</div>
+            </div>
+
+            <div style="margin-top:1.5rem;">
+              <button type="submit" class="btn-red" style="width:100%;padding:0.9rem;">Submit Review</button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast">Review posted successfully!</div>
+
+  <!-- Footer -->
+  <footer>
+    <div>
+      <div class="footer-logo">The <span>Roofing</span> Company</div>
+      <div class="footer-tagline">Covering London &amp; Surrounding Areas</div>
+      <div class="footer-copy">&copy; 2026 The Roofing Company. All rights reserved.</div>
+    </div>
+    <ul class="footer-nav">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="booking.html">Book Now</a></li>
+      <li><a href="reviews.html">Reviews</a></li>
+    </ul>
+  </footer>
+
+  <script>
+    var STORAGE_KEY = 'trc_reviews';
+
+    var MONTHS = ['January','February','March','April','May','June',
+                  'July','August','September','October','November','December'];
+
+    function loadReviews() {
+      try {
+        var s = localStorage.getItem(STORAGE_KEY);
+        if (s) return JSON.parse(s);
+      } catch (e) {}
+      return [];
+    }
+
+    function saveReviews(arr) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+    }
+
+    function formatDate(d) {
+      return d.getDate() + ' ' + MONTHS[d.getMonth()] + ' ' + d.getFullYear();
+    }
+
+    function escapeHTML(s) {
+      return String(s)
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function starsHTML(rating) {
+      var h = '';
+      for (var i = 1; i <= 5; i++) {
+        h += '<span class="star-display ' + (i <= rating ? 'filled' : 'empty') + '">&#9733;</span>';
+      }
+      return h;
+    }
+
+    function renderReviews() {
+      var reviews = loadReviews();
+      var list    = document.getElementById('reviewsList');
+      var countEl = document.getElementById('reviewsCount');
+
+      countEl.textContent = reviews.length === 1 ? '1 Review' : reviews.length + ' Reviews';
+      list.innerHTML = '';
+
+      if (reviews.length === 0) {
+        list.innerHTML = '<div class="no-reviews">No reviews yet &mdash; be the first to share your experience.</div>';
+        return;
+      }
+
+      reviews.slice().reverse().forEach(function (r) {
+        var card = document.createElement('div');
+        card.className = 'review-card';
+        card.innerHTML =
+          '<div class="review-header">' +
+            '<span class="review-name">' + escapeHTML(r.name) + '</span>' +
+            '<span class="review-date">' + escapeHTML(r.date) + '</span>' +
+          '</div>' +
+          '<div class="review-stars">' + starsHTML(r.rating) + '</div>' +
+          '<p class="review-comment">' + escapeHTML(r.comment) + '</p>';
+        list.appendChild(card);
+      });
+    }
+
+    /* ── Star picker ─────────────────────────────── */
+    var selectedRating = 0;
+    var starPicks = document.querySelectorAll('.star-pick');
+
+    function updateStars(hoverVal, selVal) {
+      starPicks.forEach(function (s) {
+        var v = parseInt(s.getAttribute('data-value'), 10);
+        s.classList.remove('hovered', 'selected');
+        if (hoverVal > 0 && v <= hoverVal) s.classList.add('hovered');
+        else if (hoverVal === 0 && v <= selVal) s.classList.add('selected');
+      });
+    }
+
+    starPicks.forEach(function (star) {
+      star.addEventListener('mouseover', function () {
+        updateStars(parseInt(star.getAttribute('data-value'), 10), selectedRating);
+      });
+      star.addEventListener('click', function () {
+        selectedRating = parseInt(star.getAttribute('data-value'), 10);
+        document.getElementById('rating-error').style.display = 'none';
+        updateStars(0, selectedRating);
+      });
+      star.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          selectedRating = parseInt(star.getAttribute('data-value'), 10);
+          document.getElementById('rating-error').style.display = 'none';
+          updateStars(0, selectedRating);
+        }
+      });
+    });
+
+    document.getElementById('starPicker').addEventListener('mouseleave', function () {
+      updateStars(0, selectedRating);
+    });
+
+    /* ── Form submit ─────────────────────────────── */
+    document.getElementById('reviewForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var valid = true;
+
+      var name = document.getElementById('reviewName').value.trim();
+      var nameErr = document.getElementById('name-error');
+      if (name.length < 2) {
+        document.getElementById('reviewName').classList.add('error');
+        nameErr.style.display = 'block';
+        valid = false;
+      } else {
+        document.getElementById('reviewName').classList.remove('error');
+        nameErr.style.display = 'none';
+      }
+
+      var ratingErr = document.getElementById('rating-error');
+      if (selectedRating === 0) {
+        ratingErr.style.display = 'block';
+        valid = false;
+      } else {
+        ratingErr.style.display = 'none';
+      }
+
+      var comment = document.getElementById('reviewComment').value.trim();
+      var commentErr = document.getElementById('comment-error');
+      if (comment.length < 5) {
+        document.getElementById('reviewComment').classList.add('error');
+        commentErr.style.display = 'block';
+        valid = false;
+      } else {
+        document.getElementById('reviewComment').classList.remove('error');
+        commentErr.style.display = 'none';
+      }
+
+      if (!valid) return;
+
+      var reviews = loadReviews();
+      reviews.push({ name: name, rating: selectedRating, comment: comment, date: formatDate(new Date()) });
+      saveReviews(reviews);
+
+      document.getElementById('reviewForm').reset();
+      selectedRating = 0;
+      updateStars(0, 0);
+
+      renderReviews();
+
+      if (window.innerWidth <= 820) {
+        document.getElementById('reviewsList').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      var toast = document.getElementById('toast');
+      toast.classList.add('show');
+      setTimeout(function () { toast.classList.remove('show'); }, 3000);
+    });
+
+    document.getElementById('reviewName').addEventListener('input', function () {
+      this.classList.remove('error');
+      document.getElementById('name-error').style.display = 'none';
+    });
+    document.getElementById('reviewComment').addEventListener('input', function () {
+      this.classList.remove('error');
+      document.getElementById('comment-error').style.display = 'none';
+    });
+
+    renderReviews();
+  </script>
+
+</body>
+</html>
