@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Roof In Safe Hands &mdash; The Roofing Company</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg:          #111111;
+      --bg-card:     #1A1A1A;
+      --bg-dark:     #0A0A0A;
+      --red:         #CC0000;
+      --red-hover:   #E53935;
+      --red-glow:    rgba(204,0,0,0.35);
+      --white:       #FFFFFF;
+      --gray-300:    #BBBBBB;
+      --gray-500:    #777777;
+      --gray-700:    #3A3A3A;
+      --border:      #282828;
+      --border-light:#333333;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--white);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── Scroll reveal ────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+
+    .reveal.revealed { opacity: 1; transform: none; }
+
+    .reveal-scale {
+      opacity: 0;
+      transform: scale(0.94);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal-scale.revealed { opacity: 1; transform: none; }
+
+    .stagger:nth-child(1) { transition-delay: 0s; }
+    .stagger:nth-child(2) { transition-delay: 0.1s; }
+    .stagger:nth-child(3) { transition-delay: 0.18s; }
+    .stagger:nth-child(4) { transition-delay: 0.26s; }
+    .stagger:nth-child(5) { transition-delay: 0.34s; }
+    .stagger:nth-child(6) { transition-delay: 0.42s; }
+    .stagger:nth-child(7) { transition-delay: 0.5s; }
+    .stagger:nth-child(8) { transition-delay: 0.58s; }
+
+    /* ── Buttons ──────────────────────────────────── */
+    .btn-cta {
+      display: inline-block;
+      background: var(--red);
+      color: var(--white);
+      padding: 1.1rem 3rem;
+      border: 2px solid var(--red);
+      border-radius: 2px;
+      text-decoration: none;
+      font-family: 'Oswald', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      transition: background 0.25s, box-shadow 0.25s, transform 0.2s;
+      cursor: pointer;
+    }
+
+    .btn-cta:hover {
+      background: var(--red-hover);
+      border-color: var(--red-hover);
+      box-shadow: 0 8px 32px var(--red-glow);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline-white {
+      display: inline-block;
+      background: transparent;
+      color: var(--white);
+      padding: 1.1rem 2.5rem;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 2px;
+      text-decoration: none;
+      font-family: 'Oswald', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      transition: border-color 0.25s, transform 0.2s;
+    }
+
+    .btn-outline-white:hover { border-color: var(--white); transform: translateY(-2px); }
+
+    /* ── Urgency pill ─────────────────────────────── */
+    .urgency-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      background: rgba(204,0,0,0.12);
+      border: 1px solid rgba(204,0,0,0.35);
+      padding: 0.45rem 1rem;
+      border-radius: 100px;
+      font-size: 0.74rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #FF8080;
+      margin-bottom: 2rem;
+    }
+
+    .urgency-dot {
+      width: 7px;
+      height: 7px;
+      background: var(--red);
+      border-radius: 50%;
+      animation: pulse 1.6s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.4; transform: scale(0.7); }
+    }
+
+    /* ── Hero ─────────────────────────────────────── */
+    .hero {
+      background: linear-gradient(160deg, #050505 0%, #1A0000 55%, #0A0A0A 100%);
+      padding: 5.5rem 1.5rem 5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      min-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 80%, rgba(204,0,0,0.1) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+    }
+
+    .hero-eyebrow::before,
+    .hero-eyebrow::after {
+      content: '';
+      display: inline-block;
+      width: 28px;
+      height: 2px;
+      background: var(--red);
+    }
+
+    .hero h1 {
+      font-family: 'Oswald', sans-serif;
+      font-size: clamp(2.8rem, 9vw, 5.5rem);
+      font-weight: 700;
+      line-height: 1.02;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      margin-bottom: 1.5rem;
+      max-width: 760px;
+    }
+
+    .hero h1 span { color: var(--red); }
+
+    .hero-sub {
+      font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+      color: var(--gray-300);
+      font-weight: 300;
+      max-width: 520px;
+      margin: 0 auto 2.75rem;
+      line-height: 1.85;
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 3.5rem;
+    }
+
+    .hero-trust {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .hero-trust-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.2rem;
+    }
+
+    .hero-trust-num {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .hero-trust-label {
+      font-size: 0.67rem;
+      color: var(--gray-500);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .hero-divider {
+      width: 1px;
+      height: 36px;
+      background: var(--border-light);
+      align-self: center;
+    }
+
+    /* ── Scroll hint ──────────────────────────────── */
+    .scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--gray-700);
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      animation: floatDown 2s ease-in-out infinite;
+    }
+
+    .scroll-hint svg { width: 18px; height: 18px; }
+
+    @keyframes floatDown {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50%       { transform: translateX(-50%) translateY(6px); }
+    }
+
+    /* ── Services ─────────────────────────────────── */
+    .services-section {
+      padding: 5.5rem 1.5rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .section-label::before {
+      content: '';
+      display: inline-block;
+      width: 24px;
+      height: 2px;
+      background: var(--red);
+      flex-shrink: 0;
+    }
+
+    .section-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: clamp(1.8rem, 5vw, 2.6rem);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-bottom: 0.75rem;
+      line-height: 1.1;
+    }
+
+    .section-sub {
+      color: var(--gray-300);
+      font-weight: 300;
+      font-size: 0.92rem;
+      line-height: 1.85;
+      margin-bottom: 2.5rem;
+      max-width: 520px;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .service-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--red);
+      border-radius: 2px;
+      padding: 1.25rem 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      transition: transform 0.22s, box-shadow 0.22s;
+    }
+
+    .service-item:hover {
+      transform: translateX(4px);
+      box-shadow: -4px 0 0 0 var(--red);
+    }
+
+    .service-icon {
+      width: 36px;
+      height: 36px;
+      background: rgba(204,0,0,0.1);
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .service-icon svg {
+      width: 18px;
+      height: 18px;
+      stroke: var(--red);
+      fill: none;
+      stroke-width: 1.6;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .service-name {
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .services-cta {
+      margin-top: 2.5rem;
+      text-align: center;
+    }
+
+    /* ── Why us band ──────────────────────────────── */
+    .why-band {
+      background: #0D0D0D;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 5rem 1.5rem;
+    }
+
+    .why-inner {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .why-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .why-card {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .why-num {
+      font-family: 'Oswald', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--red);
+      opacity: 0.25;
+      line-height: 1;
+      flex-shrink: 0;
+      min-width: 36px;
+    }
+
+    .why-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.35rem;
+    }
+
+    .why-desc {
+      font-size: 0.84rem;
+      color: var(--gray-300);
+      font-weight: 300;
+      line-height: 1.8;
+    }
+
+    /* ── Reviews ──────────────────────────────────── */
+    .reviews-section {
+      padding: 5.5rem 1.5rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.1rem;
+    }
+
+    .review-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--red);
+      border-radius: 2px;
+      padding: 1.5rem 1.75rem;
+    }
+
+    .review-stars {
+      display: flex;
+      gap: 0.1rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .star { font-size: 0.95rem; color: var(--red); }
+
+    .review-comment {
+      font-size: 0.9rem;
+      color: var(--gray-300);
+      font-weight: 300;
+      line-height: 1.8;
+      margin-bottom: 1rem;
+      font-style: italic;
+    }
+
+    .review-author {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .review-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .review-name {
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--white);
+    }
+
+    .review-location {
+      font-size: 0.74rem;
+      color: var(--gray-500);
+    }
+
+    .rating-summary {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--red);
+      border-radius: 2px;
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 2rem;
+    }
+
+    .rating-big {
+      font-family: 'Oswald', sans-serif;
+      font-size: 3.5rem;
+      font-weight: 700;
+      line-height: 1;
+      color: var(--white);
+    }
+
+    .rating-right {}
+
+    .rating-stars-big {
+      display: flex;
+      gap: 0.15rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .star-big { font-size: 1.3rem; color: var(--red); }
+
+    .rating-label {
+      font-size: 0.75rem;
+      color: var(--gray-500);
+      letter-spacing: 0.06em;
+    }
+
+    /* ── Final CTA ────────────────────────────────── */
+    .final-cta {
+      background: linear-gradient(160deg, #1A0000 0%, #0A0A0A 100%);
+      border-top: 1px solid var(--border);
+      padding: 6rem 1.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .final-cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 70% at 50% 50%, rgba(204,0,0,0.08) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .final-cta h2 {
+      font-family: 'Oswald', sans-serif;
+      font-size: clamp(1.8rem, 6vw, 3rem);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 1rem;
+      line-height: 1.1;
+    }
+
+    .final-cta h2 span { color: var(--red); }
+
+    .final-cta p {
+      color: var(--gray-300);
+      font-weight: 300;
+      font-size: 0.95rem;
+      max-width: 440px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.85;
+    }
+
+    .final-cta-btns {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    .cta-note {
+      font-size: 0.74rem;
+      color: var(--gray-500);
+      letter-spacing: 0.06em;
+    }
+
+    /* ── Footer ───────────────────────────────────── */
+    .landing-footer {
+      background: #080808;
+      border-top: 2px solid var(--red);
+      padding: 2rem 1.5rem;
+      text-align: center;
+    }
+
+    .footer-logo {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.4rem;
+    }
+
+    .footer-logo span { color: var(--red); }
+
+    .footer-copy {
+      font-size: 0.72rem;
+      color: var(--gray-700);
+    }
+
+    /* ── Sticky CTA bar (mobile) ──────────────────── */
+    .sticky-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #0A0A0A;
+      border-top: 2px solid var(--red);
+      padding: 0.9rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      z-index: 100;
+      transform: translateY(100%);
+      transition: transform 0.35s ease;
+      box-shadow: 0 -8px 32px rgba(0,0,0,0.7);
+    }
+
+    .sticky-bar.visible { transform: translateY(0); }
+
+    .sticky-bar-text {
+      flex: 1;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--gray-300);
+      line-height: 1.3;
+    }
+
+    .sticky-bar-text strong {
+      display: block;
+      color: var(--white);
+      font-size: 0.88rem;
+    }
+
+    .sticky-bar a {
+      background: var(--red);
+      color: var(--white);
+      padding: 0.7rem 1.4rem;
+      border-radius: 2px;
+      text-decoration: none;
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+
+    .sticky-bar a:hover { background: var(--red-hover); }
+
+    /* ── Responsive ───────────────────────────────── */
+    @media (min-width: 640px) {
+      .sticky-bar { display: none; }
+      .reviews-grid { grid-template-columns: 1fr 1fr 1fr; }
+    }
+
+    @media (max-width: 540px) {
+      .services-grid { grid-template-columns: 1fr; }
+      .why-grid { grid-template-columns: 1fr; }
+      .hero-btns { flex-direction: column; align-items: center; }
+      .btn-cta, .btn-outline-white { width: 100%; text-align: center; }
+      .hero-trust { gap: 1rem; }
+    }
+
+    @media (max-width: 360px) {
+      .hero-divider { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Hero ───────────────────────────────────────── -->
+  <section class="hero" id="hero">
+    <div class="urgency-pill">
+      <span class="urgency-dot"></span>
+      Limited availability this month
+    </div>
+    <div class="hero-eyebrow">The Roofing Company</div>
+    <h1>Your Roof<br>In <span>Safe Hands.</span></h1>
+    <p class="hero-sub">Professional roofing repairs, replacements, and inspections. Quality workmanship backed by a written guarantee &mdash; get your free quote today.</p>
+    <div class="hero-btns">
+      <a href="booking.html" class="btn-cta">Get a Free Quote</a>
+      <a href="#services" class="btn-outline-white">Our Services</a>
+    </div>
+    <div class="hero-trust">
+      <div class="hero-trust-item">
+        <span class="hero-trust-num">500+</span>
+        <span class="hero-trust-label">Jobs Done</span>
+      </div>
+      <div class="hero-divider"></div>
+      <div class="hero-trust-item">
+        <span class="hero-trust-num">15+</span>
+        <span class="hero-trust-label">Years Experience</span>
+      </div>
+      <div class="hero-divider"></div>
+      <div class="hero-trust-item">
+        <span class="hero-trust-num">5&#9733;</span>
+        <span class="hero-trust-label">Rated Service</span>
+      </div>
+      <div class="hero-divider"></div>
+      <div class="hero-trust-item">
+        <span class="hero-trust-num">24h</span>
+        <span class="hero-trust-label">Response</span>
+      </div>
+    </div>
+    <div class="scroll-hint">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 12 15 18 9"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ── Services ───────────────────────────────────── -->
+  <section class="services-section" id="services">
+    <div class="section-label reveal">What We Cover</div>
+    <h2 class="section-title reveal">8 Services.<br>One Trusted Team.</h2>
+    <p class="section-sub reveal">From a single cracked tile to a full new roof &mdash; we handle every job with the same care and professionalism.</p>
+
+    <div class="services-grid">
+      <div class="service-item reveal stagger">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <div class="service-name">Roof Repairs</div>
+      </div>
+      <div class="service-item reveal stagger">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+        </div>
+        <div class="service-name">New Roofs</div>
+      </div>
+      <div class="service-item reveal stagger">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+        </div>
+        <div class="service-name">Flat Roofing</div>
+      </div>
+      <div class="service-item reveal stagger">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M3 6l9-4 9 4v2H3z"/><path d="M3 8v12h18V8"/><line x1="9" y1="8" x2="9" y2="20"/><line x1="15" y1="8" x2="15" y2="20"/></svg>
+        </div>
+        <div class="service-name">Guttering</div>
+      </div>
+      <div class="service-item reveal stagger">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="20" rx="1"/><line x1="8" y1="7" x2="16" y2="7"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        </div>
+        <div class="service-name">Chimney Work</div>
+      </div>
+      <div class="service-item reveal stagger">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M3 12l9-9 9 9"/><path d="M5 10v8h14v-8"/></svg>
+        </div>
+        <div class="service-name">Ridge Tiles</div>
+      </div>
+      <div class="service-item reveal stagger">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><path d="M2 20h20M4 20V8l8-6 8 6v12"/><rect x="9" y="14" width="6" height="6"/></svg>
+        </div>
+        <div class="service-name">Fascias &amp; Soffits</div>
+      </div>
+      <div class="service-item reveal stagger">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </div>
+        <div class="service-name">Roof Inspections</div>
+      </div>
+    </div>
+
+    <div class="services-cta reveal">
+      <a href="booking.html" class="btn-cta">Get a Free Quote &rarr;</a>
+    </div>
+  </section>
+
+  <!-- ── Why Choose Us ──────────────────────────────── -->
+  <div class="why-band">
+    <div class="why-inner">
+      <div class="section-label reveal">Why Choose Us</div>
+      <h2 class="section-title reveal" style="margin-bottom:2.5rem;">Built on Quality<br>&amp; Trust</h2>
+      <div class="why-grid">
+        <div class="why-card reveal stagger">
+          <div class="why-num">01</div>
+          <div>
+            <div class="why-title">Fully Insured</div>
+            <p class="why-desc">All our roofers carry full public liability insurance on every single job, giving you complete peace of mind.</p>
+          </div>
+        </div>
+        <div class="why-card reveal stagger">
+          <div class="why-num">02</div>
+          <div>
+            <div class="why-title">Free Quotes</div>
+            <p class="why-desc">No-obligation quotes with no hidden charges. You know exactly what you&rsquo;re paying before we start.</p>
+          </div>
+        </div>
+        <div class="why-card reveal stagger">
+          <div class="why-num">03</div>
+          <div>
+            <div class="why-title">Experienced Team</div>
+            <p class="why-desc">Over 15 years of hands-on experience across all roof types, from Victorian terraces to modern flat roofs.</p>
+          </div>
+        </div>
+        <div class="why-card reveal stagger">
+          <div class="why-num">04</div>
+          <div>
+            <div class="why-title">Guaranteed Work</div>
+            <p class="why-desc">Every job comes with a written workmanship guarantee. If something isn&rsquo;t right, we&rsquo;ll come back and fix it.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Reviews ────────────────────────────────────── -->
+  <section class="reviews-section">
+    <div class="section-label reveal">Customer Reviews</div>
+    <h2 class="section-title reveal">What Our Customers Say</h2>
+    <p class="section-sub reveal">Real reviews from real customers. We&rsquo;re proud of every job we complete.</p>
+
+    <div class="rating-summary reveal">
+      <div class="rating-big">4.9</div>
+      <div class="rating-right">
+        <div class="rating-stars-big">
+          <span class="star-big">&#9733;</span>
+          <span class="star-big">&#9733;</span>
+          <span class="star-big">&#9733;</span>
+          <span class="star-big">&#9733;</span>
+          <span class="star-big">&#9733;</span>
+        </div>
+        <div class="rating-label">Average rating &middot; 80+ verified reviews</div>
+      </div>
+    </div>
+
+    <div class="reviews-grid">
+      <div class="review-card reveal stagger">
+        <div class="review-stars">
+          <span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span>
+        </div>
+        <p class="review-comment">&ldquo;Absolutely brilliant service. Had a leak that had been causing problems for months. They came out quickly, diagnosed it straight away, and fixed it properly. No mess, no fuss. Brilliant.&rdquo;</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:rgba(204,0,0,0.15);color:var(--red);">MH</div>
+          <div>
+            <div class="review-name">Mark H.</div>
+            <div class="review-location">Roof Repair</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="review-card reveal stagger">
+        <div class="review-stars">
+          <span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span>
+        </div>
+        <p class="review-comment">&ldquo;Had a full new flat roof done on my extension. The team were professional, tidy, and finished ahead of schedule. The finish is excellent and the price was fair. Highly recommend.&rdquo;</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:rgba(34,197,94,0.12);color:#22C55E;">SB</div>
+          <div>
+            <div class="review-name">Sarah B.</div>
+            <div class="review-location">Flat Roofing</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="review-card reveal stagger">
+        <div class="review-stars">
+          <span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span>
+        </div>
+        <p class="review-comment">&ldquo;Got our gutters replaced and fascias done at the same time. Great communication throughout, turned up when they said, and cleaned up after. Would definitely use them again.&rdquo;</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:rgba(245,158,11,0.12);color:#F59E0B;">DP</div>
+          <div>
+            <div class="review-name">David P.</div>
+            <div class="review-location">Guttering &amp; Fascias</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Final CTA ───────────────────────────────────── -->
+  <section class="final-cta">
+    <div class="urgency-pill reveal">
+      <span class="urgency-dot"></span>
+      Limited availability this month &mdash; don&rsquo;t wait
+    </div>
+    <h2 class="reveal">Ready to Get<br>Your <span>Roof Fixed?</span></h2>
+    <p class="reveal">Request your free, no-obligation quote today and we&rsquo;ll get back to you within 24 hours to confirm your appointment.</p>
+    <div class="final-cta-btns reveal">
+      <a href="booking.html" class="btn-cta">Get a Free Quote &rarr;</a>
+    </div>
+    <div class="cta-note reveal">Free quote &middot; No obligation &middot; We reply within 24 hours</div>
+  </section>
+
+  <!-- ── Footer ─────────────────────────────────────── -->
+  <footer class="landing-footer">
+    <div class="footer-logo">The <span>Roofing</span> Company</div>
+    <div class="footer-copy">&copy; 2026 The Roofing Company. All rights reserved.</div>
+  </footer>
+
+  <!-- Sticky CTA bar (mobile) -->
+  <div class="sticky-bar" id="stickyBar">
+    <div class="sticky-bar-text">
+      <strong>Get a Free Quote</strong>
+      Limited availability this month
+    </div>
+    <a href="booking.html">Book Now</a>
+  </div>
+
+  <script>
+    /* ── Scroll reveal ──────────────────────────────── */
+    var revealEls = document.querySelectorAll('.reveal, .reveal-scale');
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    revealEls.forEach(function (el) { observer.observe(el); });
+
+    /* ── Sticky bar ─────────────────────────────────── */
+    var hero     = document.getElementById('hero');
+    var stickyBar = document.getElementById('stickyBar');
+
+    window.addEventListener('scroll', function () {
+      var heroBottom = hero.getBoundingClientRect().bottom;
+      stickyBar.classList.toggle('visible', heroBottom < 0);
+    }, { passive: true });
+  </script>
+
+</body>
+</html>
