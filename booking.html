@@ -218,6 +218,29 @@
 
       if (!valid) return;
 
+      // Save to localStorage for dashboard
+      var rawDate = document.getElementById('date').value;
+      var fmtDate = (function () {
+        var d = new Date(rawDate + 'T00:00:00');
+        return d.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+      })();
+      var bookingEntry = {
+        id:      Date.now().toString(),
+        service: document.getElementById('service').value,
+        rawDate: rawDate,
+        date:    fmtDate,
+        time:    document.getElementById('time').value,
+        name:    document.getElementById('name').value.trim(),
+        email:   document.getElementById('email').value.trim(),
+        phone:   document.getElementById('phone').value.trim(),
+        details: document.getElementById('details').value.trim(),
+        status:  'pending'
+      };
+      var allBookings = [];
+      try { allBookings = JSON.parse(localStorage.getItem('trc_bookings') || '[]'); } catch (e) {}
+      allBookings.push(bookingEntry);
+      localStorage.setItem('trc_bookings', JSON.stringify(allBookings));
+
       // Show success
       document.getElementById('bookingForm').style.display = 'none';
       var success = document.getElementById('bookingSuccess');

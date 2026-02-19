@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard &mdash; The Roofing Company</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg:           #111111;
+      --bg-card:      #1A1A1A;
+      --bg-elevated:  #222222;
+      --sidebar:      #0A0A0A;
+      --red:          #CC0000;
+      --red-hover:    #E53935;
+      --red-dark:     #990000;
+      --white:        #FFFFFF;
+      --gray-300:     #BBBBBB;
+      --gray-500:     #777777;
+      --gray-700:     #3A3A3A;
+      --border:       #282828;
+      --border-light: #333333;
+      --green:        #22C55E;
+      --orange:       #F59E0B;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--white);
+      min-height: 100vh;
+      line-height: 1.6;
+      display: flex;
+    }
+
+    /* ── Sidebar ──────────────────────────────────── */
+    .db-sidebar {
+      width: 248px;
+      min-height: 100vh;
+      background: var(--sidebar);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      z-index: 50;
+    }
+
+    .db-logo {
+      padding: 1.8rem 1.5rem 1.5rem;
+      border-bottom: 2px solid var(--red);
+    }
+
+    .db-logo-name {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--white);
+      line-height: 1.2;
+    }
+
+    .db-logo-name span { color: var(--red); }
+
+    .db-logo-sub {
+      font-size: 0.67rem;
+      color: var(--gray-500);
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      margin-top: 0.3rem;
+    }
+
+    .db-nav {
+      padding: 1.25rem 0.75rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .db-nav-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      width: 100%;
+      background: none;
+      border: none;
+      border-left: 3px solid transparent;
+      padding: 0.78rem 1rem;
+      border-radius: 0 3px 3px 0;
+      color: var(--gray-500);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      text-align: left;
+      transition: background 0.18s, color 0.18s, border-color 0.18s;
+    }
+
+    .db-nav-btn:hover {
+      background: var(--bg-elevated);
+      color: var(--gray-300);
+    }
+
+    .db-nav-btn.active {
+      background: rgba(204,0,0,0.1);
+      color: var(--white);
+      border-left-color: var(--red);
+    }
+
+    .db-nav-icon {
+      width: 15px;
+      height: 15px;
+      flex-shrink: 0;
+      opacity: 0.65;
+    }
+
+    .db-nav-btn.active .db-nav-icon { opacity: 1; }
+
+    .db-back-link {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .db-back-link a {
+      font-size: 0.72rem;
+      color: var(--gray-500);
+      text-decoration: none;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: color 0.2s;
+    }
+
+    .db-back-link a:hover { color: var(--red); }
+
+    /* ── Main ─────────────────────────────────────── */
+    .db-main {
+      margin-left: 248px;
+      flex: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .db-topbar {
+      background: var(--sidebar);
+      border-bottom: 1px solid var(--border);
+      padding: 1.1rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+
+    .db-topbar-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .db-topbar-date {
+      font-size: 0.74rem;
+      color: var(--gray-500);
+      letter-spacing: 0.06em;
+    }
+
+    .db-content {
+      padding: 2.5rem;
+      flex: 1;
+    }
+
+    /* ── Sections ─────────────────────────────────── */
+    .db-section { display: none; }
+    .db-section.active { display: block; }
+
+    .db-section-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.25rem;
+    }
+
+    .db-section-sub {
+      font-size: 0.8rem;
+      color: var(--gray-500);
+      margin-bottom: 2rem;
+    }
+
+    /* ── Stat cards ───────────────────────────────── */
+    .stat-cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--red);
+      border-radius: 3px;
+      padding: 1.6rem 1.5rem;
+    }
+
+    .stat-card.green  { border-left-color: var(--green); }
+    .stat-card.orange { border-left-color: var(--orange); }
+    .stat-card.gray   { border-left-color: var(--gray-500); }
+
+    .stat-card-label {
+      font-size: 0.67rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gray-500);
+      margin-bottom: 0.7rem;
+    }
+
+    .stat-card-value {
+      font-family: 'Oswald', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      line-height: 1;
+      color: var(--white);
+    }
+
+    .stat-card-note {
+      font-size: 0.7rem;
+      color: var(--gray-500);
+      margin-top: 0.45rem;
+    }
+
+    /* ── Panel ────────────────────────────────────── */
+    .db-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+
+    .db-panel-header {
+      padding: 1.1rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .db-panel-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .db-panel-body { padding: 1.5rem; }
+
+    /* ── Filter tabs ──────────────────────────────── */
+    .filter-tabs {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-tab {
+      background: none;
+      border: 1px solid var(--border-light);
+      color: var(--gray-500);
+      padding: 0.38rem 1rem;
+      border-radius: 2px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+
+    .filter-tab:hover { border-color: var(--gray-500); color: var(--gray-300); }
+    .filter-tab.active { background: var(--red); border-color: var(--red); color: var(--white); }
+
+    /* ── Table ────────────────────────────────────── */
+    .db-table-wrap { overflow-x: auto; }
+
+    .db-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+    }
+
+    .db-table th {
+      background: #141414;
+      padding: 0.7rem 1rem;
+      text-align: left;
+      font-size: 0.67rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gray-500);
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    .db-table td {
+      padding: 0.9rem 1rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--gray-300);
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+
+    .db-table tr:last-child td { border-bottom: none; }
+    .db-table tr:hover td { background: rgba(255,255,255,0.02); }
+    .db-table td.td-name { color: var(--white); font-weight: 500; }
+    .db-table td.td-service { color: var(--red); font-weight: 500; font-size: 0.78rem; }
+
+    /* ── Badges ───────────────────────────────────── */
+    .badge {
+      display: inline-block;
+      padding: 0.22rem 0.6rem;
+      border-radius: 2px;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .badge-pending   { background: rgba(245,158,11,0.14); color: var(--orange); border: 1px solid rgba(245,158,11,0.28); }
+    .badge-confirmed { background: rgba(34,197,94,0.12);  color: var(--green);  border: 1px solid rgba(34,197,94,0.28); }
+    .badge-cancelled { background: rgba(204,0,0,0.12);    color: #FF6B6B;       border: 1px solid rgba(204,0,0,0.25); }
+
+    /* ── Action buttons ───────────────────────────── */
+    .action-btns { display: flex; gap: 0.4rem; }
+
+    .btn-action {
+      background: none;
+      border: 1px solid var(--border-light);
+      color: var(--gray-500);
+      padding: 0.28rem 0.7rem;
+      border-radius: 2px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.18s;
+      white-space: nowrap;
+    }
+
+    .btn-action.confirm { border-color: rgba(34,197,94,0.4); color: var(--green); }
+    .btn-action.confirm:hover { background: rgba(34,197,94,0.1); }
+    .btn-action.cancel  { border-color: rgba(204,0,0,0.4); color: #FF6B6B; }
+    .btn-action.cancel:hover  { background: rgba(204,0,0,0.1); }
+    .btn-action.delete  { border-color: rgba(204,0,0,0.4); color: #FF6B6B; }
+    .btn-action.delete:hover  { background: rgba(204,0,0,0.1); }
+
+    /* ── Empty state ──────────────────────────────── */
+    .empty-state {
+      text-align: center;
+      padding: 3.5rem 2rem;
+      color: var(--gray-500);
+      font-size: 0.84rem;
+    }
+
+    .empty-icon { font-size: 2.2rem; margin-bottom: 0.65rem; opacity: 0.4; }
+
+    /* ── Today list (overview) ────────────────────── */
+    .today-list { display: flex; flex-direction: column; gap: 0.6rem; }
+
+    .today-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.85rem 1rem;
+      background: var(--bg-elevated);
+      border-radius: 2px;
+      font-size: 0.82rem;
+    }
+
+    .today-time {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 600;
+      color: var(--red);
+      font-size: 0.88rem;
+      min-width: 72px;
+    }
+
+    .today-name { font-weight: 500; color: var(--white); flex: 1; }
+    .today-service { font-size: 0.74rem; color: var(--gray-500); margin-right: 0.5rem; }
+
+    /* ── Reviews grid ─────────────────────────────── */
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.2rem;
+    }
+
+    .db-review-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--red);
+      border-radius: 2px;
+      padding: 1.4rem 1.5rem;
+    }
+
+    .db-review-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .db-review-name {
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .db-review-date { font-size: 0.67rem; color: var(--gray-500); white-space: nowrap; padding-top: 0.1rem; }
+
+    .db-review-stars { display: flex; gap: 0.08rem; margin-bottom: 0.65rem; }
+    .db-star { font-size: 0.88rem; line-height: 1; }
+    .db-star.filled { color: var(--red); }
+    .db-star.empty  { color: var(--gray-700); }
+
+    .db-review-comment {
+      font-size: 0.82rem;
+      color: var(--gray-300);
+      font-weight: 300;
+      line-height: 1.75;
+    }
+
+    /* ── Service popularity ───────────────────────── */
+    .service-rows { display: flex; flex-direction: column; gap: 1.1rem; }
+
+    .service-row { display: flex; align-items: center; gap: 1.25rem; }
+
+    .service-row-rank {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--red);
+      opacity: 0.45;
+      width: 24px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .service-row-info { flex: 1; }
+
+    .service-row-name {
+      font-size: 0.84rem;
+      font-weight: 500;
+      color: var(--white);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.45rem;
+    }
+
+    .service-row-count { font-size: 0.7rem; color: var(--gray-500); }
+
+    .service-row-bar {
+      height: 5px;
+      background: var(--border-light);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .service-row-fill {
+      height: 100%;
+      background: var(--red);
+      border-radius: 3px;
+      transition: width 0.5s ease;
+    }
+
+    /* ── Toast ────────────────────────────────────── */
+    .db-toast {
+      position: fixed;
+      bottom: 2rem;
+      left: calc(248px + 50%);
+      transform: translateX(-50%) translateY(16px);
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      border-left: 3px solid var(--green);
+      color: var(--white);
+      padding: 0.8rem 1.75rem;
+      border-radius: 2px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      opacity: 0;
+      transition: opacity 0.28s, transform 0.28s;
+      pointer-events: none;
+      z-index: 200;
+      white-space: nowrap;
+    }
+
+    .db-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ── Responsive ───────────────────────────────── */
+    @media (max-width: 1100px) {
+      .stat-cards { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 820px) {
+      .db-sidebar { display: none; }
+      .db-main { margin-left: 0; }
+      .db-content { padding: 1.5rem; }
+      .stat-cards { grid-template-columns: 1fr 1fr; }
+      .db-toast { left: 50%; }
+    }
+
+    @media (max-width: 540px) {
+      .stat-cards { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <aside class="db-sidebar">
+    <div class="db-logo">
+      <div class="db-logo-name">The <span>Roofing</span> Co.</div>
+      <div class="db-logo-sub">Admin Dashboard</div>
+    </div>
+    <nav class="db-nav">
+      <button class="db-nav-btn active" data-section="overview">
+        <svg class="db-nav-icon" viewBox="0 0 16 16" fill="currentColor">
+          <rect x="1" y="1" width="6" height="6" rx="1"/>
+          <rect x="9" y="1" width="6" height="6" rx="1"/>
+          <rect x="1" y="9" width="6" height="6" rx="1"/>
+          <rect x="9" y="9" width="6" height="6" rx="1"/>
+        </svg>
+        Overview
+      </button>
+      <button class="db-nav-btn" data-section="bookings">
+        <svg class="db-nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="1" y="3" width="14" height="11" rx="1"/>
+          <path d="M5 1v4M11 1v4M1 7h14"/>
+        </svg>
+        Bookings
+      </button>
+      <button class="db-nav-btn" data-section="reviews">
+        <svg class="db-nav-icon" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M8 1.5l1.6 3.3 3.6.5-2.6 2.5.6 3.6L8 9.8l-3.2 1.6.6-3.6L2.8 5.3l3.6-.5z"/>
+        </svg>
+        Reviews
+      </button>
+      <button class="db-nav-btn" data-section="services">
+        <svg class="db-nav-icon" viewBox="0 0 16 16" fill="currentColor">
+          <rect x="1"  y="10" width="3" height="5" rx="0.5"/>
+          <rect x="6"  y="6"  width="3" height="9" rx="0.5"/>
+          <rect x="11" y="2"  width="3" height="13" rx="0.5"/>
+        </svg>
+        Services
+      </button>
+    </nav>
+    <div class="db-back-link">
+      <a href="index.html">&#8592; Back to Site</a>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="db-main">
+    <div class="db-topbar">
+      <div class="db-topbar-title" id="topbarTitle">Overview</div>
+      <div class="db-topbar-date" id="topbarDate"></div>
+    </div>
+
+    <div class="db-content">
+
+      <!-- ── Overview ─────────────────────────────── -->
+      <div class="db-section active" id="sec-overview">
+        <div class="db-section-title">Overview</div>
+        <div class="db-section-sub">Summary of all enquiries, bookings, and reviews</div>
+
+        <div class="stat-cards">
+          <div class="stat-card">
+            <div class="stat-card-label">Total Enquiries</div>
+            <div class="stat-card-value" id="ov-total">0</div>
+            <div class="stat-card-note">All time submissions</div>
+          </div>
+          <div class="stat-card orange">
+            <div class="stat-card-label">Today's Bookings</div>
+            <div class="stat-card-value" id="ov-today">0</div>
+            <div class="stat-card-note">Received today</div>
+          </div>
+          <div class="stat-card green">
+            <div class="stat-card-label">Confirmed</div>
+            <div class="stat-card-value" id="ov-confirmed">0</div>
+            <div class="stat-card-note">Marked as confirmed</div>
+          </div>
+          <div class="stat-card gray">
+            <div class="stat-card-label">Avg Rating</div>
+            <div class="stat-card-value" id="ov-rating">&mdash;</div>
+            <div class="stat-card-note">From customer reviews</div>
+          </div>
+        </div>
+
+        <div class="db-panel">
+          <div class="db-panel-header">
+            <div class="db-panel-title">Today's Appointments</div>
+            <div style="font-size:0.72rem;color:var(--gray-500);" id="ov-today-label"></div>
+          </div>
+          <div class="db-panel-body" id="ov-today-body">
+            <div class="empty-state"><div class="empty-icon">📅</div>No appointments today</div>
+          </div>
+        </div>
+
+        <div class="db-panel">
+          <div class="db-panel-header">
+            <div class="db-panel-title">Recent Enquiries</div>
+            <div style="font-size:0.72rem;color:var(--gray-500);">Last 5</div>
+          </div>
+          <div class="db-table-wrap">
+            <table class="db-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Service</th>
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="ov-recent-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Bookings ──────────────────────────────── -->
+      <div class="db-section" id="sec-bookings">
+        <div class="db-section-title">Bookings</div>
+        <div class="db-section-sub">All customer enquiries &mdash; confirm or cancel each one</div>
+
+        <div class="db-panel">
+          <div class="db-panel-header">
+            <div class="filter-tabs" id="bookingTabs">
+              <button class="filter-tab active" data-filter="all">All</button>
+              <button class="filter-tab" data-filter="today">Today</button>
+              <button class="filter-tab" data-filter="pending">Pending</button>
+              <button class="filter-tab" data-filter="confirmed">Confirmed</button>
+              <button class="filter-tab" data-filter="cancelled">Cancelled</button>
+            </div>
+          </div>
+          <div class="db-table-wrap">
+            <table class="db-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Service</th>
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>Phone</th>
+                  <th>Email</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="bookings-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Reviews ───────────────────────────────── -->
+      <div class="db-section" id="sec-reviews">
+        <div class="db-section-title">Reviews</div>
+        <div class="db-section-sub">All customer reviews &mdash; delete any inappropriate ones</div>
+        <div id="reviews-count-bar" style="margin-bottom:1.25rem;font-size:0.78rem;color:var(--gray-500);letter-spacing:0.06em;text-transform:uppercase;"></div>
+        <div class="reviews-grid" id="reviews-grid"></div>
+      </div>
+
+      <!-- ── Services ──────────────────────────────── -->
+      <div class="db-section" id="sec-services">
+        <div class="db-section-title">Services</div>
+        <div class="db-section-sub">Most popular services based on customer enquiries</div>
+
+        <div class="db-panel">
+          <div class="db-panel-header">
+            <div class="db-panel-title">Enquiries by Service</div>
+            <div style="font-size:0.72rem;color:var(--gray-500);" id="services-total-label"></div>
+          </div>
+          <div class="db-panel-body">
+            <div class="service-rows" id="service-rows"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="db-toast" id="dbToast"></div>
+
+  <script>
+    /* ── Storage helpers ──────────────────────────── */
+    var BOOKINGS_KEY = 'trc_bookings';
+    var REVIEWS_KEY  = 'trc_reviews';
+
+    function loadBookings() {
+      try { return JSON.parse(localStorage.getItem(BOOKINGS_KEY) || '[]'); } catch (e) { return []; }
+    }
+
+    function saveBookings(arr) {
+      localStorage.setItem(BOOKINGS_KEY, JSON.stringify(arr));
+    }
+
+    function loadReviews() {
+      try { return JSON.parse(localStorage.getItem(REVIEWS_KEY) || '[]'); } catch (e) { return []; }
+    }
+
+    function saveReviews(arr) {
+      localStorage.setItem(REVIEWS_KEY, JSON.stringify(arr));
+    }
+
+    function todayStr() {
+      return new Date().toISOString().split('T')[0];
+    }
+
+    function esc(s) {
+      return String(s || '')
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function starsHTML(n) {
+      var h = '';
+      for (var i = 1; i <= 5; i++) {
+        h += '<span class="db-star ' + (i <= n ? 'filled' : 'empty') + '">&#9733;</span>';
+      }
+      return h;
+    }
+
+    function badgeHTML(status) {
+      return '<span class="badge badge-' + esc(status) + '">' + esc(status) + '</span>';
+    }
+
+    /* ── Toast ────────────────────────────────────── */
+    function showToast(msg) {
+      var t = document.getElementById('dbToast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(function () { t.classList.remove('show'); }, 2800);
+    }
+
+    /* ── Topbar date ──────────────────────────────── */
+    (function () {
+      var d = new Date();
+      var days   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+      var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+      var str = days[d.getDay()] + ', ' + d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+      document.getElementById('topbarDate').textContent = str;
+      document.getElementById('ov-today-label').textContent = days[d.getDay()] + ', ' + d.getDate() + ' ' + months[d.getMonth()];
+    })();
+
+    /* ── Section switching ────────────────────────── */
+    var sectionTitles = { overview:'Overview', bookings:'Bookings', reviews:'Reviews', services:'Services' };
+
+    document.querySelectorAll('.db-nav-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var target = btn.getAttribute('data-section');
+        document.querySelectorAll('.db-nav-btn').forEach(function (b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        document.querySelectorAll('.db-section').forEach(function (s) { s.classList.remove('active'); });
+        document.getElementById('sec-' + target).classList.add('active');
+        document.getElementById('topbarTitle').textContent = sectionTitles[target];
+        if (target === 'overview') renderOverview();
+        if (target === 'bookings') renderBookings('all');
+        if (target === 'reviews')  renderReviews();
+        if (target === 'services') renderServices();
+      });
+    });
+
+    /* ── Overview ─────────────────────────────────── */
+    function renderOverview() {
+      var bookings  = loadBookings();
+      var reviews   = loadReviews();
+      var today     = todayStr();
+
+      document.getElementById('ov-total').textContent     = bookings.length;
+      document.getElementById('ov-today').textContent     = bookings.filter(function (b) { return b.rawDate === today; }).length;
+      document.getElementById('ov-confirmed').textContent = bookings.filter(function (b) { return b.status === 'confirmed'; }).length;
+
+      var avgRating = reviews.length
+        ? (reviews.reduce(function (s, r) { return s + r.rating; }, 0) / reviews.length).toFixed(1) + '\u2605'
+        : '\u2014';
+      document.getElementById('ov-rating').textContent = avgRating;
+
+      // Today's list
+      var todayItems = bookings
+        .filter(function (b) { return b.rawDate === today; })
+        .sort(function (a, b) { return a.time > b.time ? 1 : -1; });
+      var todayBody = document.getElementById('ov-today-body');
+      if (todayItems.length === 0) {
+        todayBody.innerHTML = '<div class="empty-state"><div class="empty-icon">&#128197;</div>No appointments today</div>';
+      } else {
+        todayBody.innerHTML = '<div class="today-list">' + todayItems.map(function (b) {
+          return '<div class="today-item">' +
+            '<div class="today-time">' + esc(b.time) + '</div>' +
+            '<div class="today-name">' + esc(b.name) + '</div>' +
+            '<div class="today-service">' + esc(b.service) + '</div>' +
+            badgeHTML(b.status) +
+            '</div>';
+        }).join('') + '</div>';
+      }
+
+      // Recent 5
+      var recent = bookings.slice().reverse().slice(0, 5);
+      var tbody = document.getElementById('ov-recent-tbody');
+      if (recent.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--gray-500);padding:3rem;">No enquiries yet</td></tr>';
+      } else {
+        tbody.innerHTML = recent.map(function (b) {
+          return '<tr>' +
+            '<td class="td-name">' + esc(b.name) + '</td>' +
+            '<td class="td-service">' + esc(b.service) + '</td>' +
+            '<td>' + esc(b.date) + '</td>' +
+            '<td>' + esc(b.time) + '</td>' +
+            '<td>' + badgeHTML(b.status) + '</td>' +
+            '</tr>';
+        }).join('');
+      }
+    }
+
+    /* ── Bookings ─────────────────────────────────── */
+    var currentFilter = 'all';
+
+    function renderBookings(filter) {
+      currentFilter = filter;
+      document.querySelectorAll('#bookingTabs .filter-tab').forEach(function (t) {
+        t.classList.toggle('active', t.getAttribute('data-filter') === filter);
+      });
+
+      var today    = todayStr();
+      var bookings = loadBookings().filter(function (b) {
+        if (filter === 'all')       return true;
+        if (filter === 'today')     return b.rawDate === today;
+        if (filter === 'pending')   return b.status === 'pending';
+        if (filter === 'confirmed') return b.status === 'confirmed';
+        if (filter === 'cancelled') return b.status === 'cancelled';
+        return true;
+      }).reverse();
+
+      var tbody = document.getElementById('bookings-tbody');
+      if (bookings.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--gray-500);padding:3rem;">No enquiries found</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = bookings.map(function (b) {
+        var actions = '';
+        if (b.status !== 'confirmed') actions += '<button class="btn-action confirm" onclick="updateStatus(\'' + b.id + '\',\'confirmed\')">Confirm</button>';
+        if (b.status !== 'cancelled') actions += '<button class="btn-action cancel"  onclick="updateStatus(\'' + b.id + '\',\'cancelled\')">Cancel</button>';
+        return '<tr>' +
+          '<td class="td-name">'    + esc(b.name)    + '</td>' +
+          '<td class="td-service">' + esc(b.service) + '</td>' +
+          '<td>' + esc(b.date)  + '</td>' +
+          '<td>' + esc(b.time)  + '</td>' +
+          '<td>' + esc(b.phone) + '</td>' +
+          '<td>' + esc(b.email) + '</td>' +
+          '<td>' + badgeHTML(b.status) + '</td>' +
+          '<td><div class="action-btns">' + actions + '</div></td>' +
+          '</tr>';
+      }).join('');
+    }
+
+    function updateStatus(id, newStatus) {
+      var bookings = loadBookings().map(function (b) {
+        if (b.id === id) b.status = newStatus;
+        return b;
+      });
+      saveBookings(bookings);
+      renderBookings(currentFilter);
+      if (document.getElementById('sec-overview').classList.contains('active')) renderOverview();
+      showToast('Booking ' + newStatus);
+    }
+
+    document.querySelectorAll('#bookingTabs .filter-tab').forEach(function (tab) {
+      tab.addEventListener('click', function () { renderBookings(tab.getAttribute('data-filter')); });
+    });
+
+    /* ── Reviews ──────────────────────────────────── */
+    function renderReviews() {
+      var reviews = loadReviews();
+      var countBar = document.getElementById('reviews-count-bar');
+      var grid     = document.getElementById('reviews-grid');
+
+      countBar.textContent = reviews.length === 1 ? '1 Review' : reviews.length + ' Reviews';
+
+      if (reviews.length === 0) {
+        grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">&#11088;</div>No reviews yet</div>';
+        return;
+      }
+
+      grid.innerHTML = reviews.slice().reverse().map(function (r, i) {
+        var realIdx = reviews.length - 1 - i;
+        return '<div class="db-review-card">' +
+          '<div class="db-review-top">' +
+            '<div>' +
+              '<div class="db-review-name">' + esc(r.name) + '</div>' +
+              '<div class="db-review-date">' + esc(r.date) + '</div>' +
+            '</div>' +
+            '<button class="btn-action delete" onclick="deleteReview(' + realIdx + ')">Delete</button>' +
+          '</div>' +
+          '<div class="db-review-stars">' + starsHTML(r.rating) + '</div>' +
+          '<p class="db-review-comment">' + esc(r.comment) + '</p>' +
+          '</div>';
+      }).join('');
+    }
+
+    function deleteReview(idx) {
+      if (!confirm('Delete this review? This cannot be undone.')) return;
+      var reviews = loadReviews();
+      reviews.splice(idx, 1);
+      saveReviews(reviews);
+      renderReviews();
+      showToast('Review deleted');
+    }
+
+    /* ── Services ─────────────────────────────────── */
+    function renderServices() {
+      var bookings = loadBookings();
+      var label    = document.getElementById('services-total-label');
+      var rowsEl   = document.getElementById('service-rows');
+
+      label.textContent = bookings.length + ' total ' + (bookings.length === 1 ? 'enquiry' : 'enquiries');
+
+      if (bookings.length === 0) {
+        rowsEl.innerHTML = '<div class="empty-state"><div class="empty-icon">&#128295;</div>No enquiries yet</div>';
+        return;
+      }
+
+      var counts = {};
+      bookings.forEach(function (b) { counts[b.service] = (counts[b.service] || 0) + 1; });
+
+      var allServices = ['Roof Repairs','New Roofs','Flat Roofing','Guttering','Chimney Work','Ridge Tiles','Fascias and Soffits','Roof Inspections'];
+      Object.keys(counts).forEach(function (s) { if (allServices.indexOf(s) === -1) allServices.push(s); });
+
+      var sorted = allServices
+        .map(function (s) { return { name: s, count: counts[s] || 0 }; })
+        .filter(function (s) { return s.count > 0; })
+        .sort(function (a, b) { return b.count - a.count; });
+
+      if (sorted.length === 0) {
+        rowsEl.innerHTML = '<div class="empty-state"><div class="empty-icon">&#128295;</div>No enquiries yet</div>';
+        return;
+      }
+
+      var max = sorted[0].count;
+      rowsEl.innerHTML = sorted.map(function (s, i) {
+        var pct = max > 0 ? Math.round((s.count / max) * 100) : 0;
+        return '<div class="service-row">' +
+          '<div class="service-row-rank">' + (i + 1) + '</div>' +
+          '<div class="service-row-info">' +
+            '<div class="service-row-name">' +
+              '<span>' + esc(s.name) + '</span>' +
+              '<span class="service-row-count">' + s.count + ' ' + (s.count === 1 ? 'enquiry' : 'enquiries') + '</span>' +
+            '</div>' +
+            '<div class="service-row-bar"><div class="service-row-fill" style="width:' + pct + '%"></div></div>' +
+          '</div>' +
+          '</div>';
+      }).join('');
+    }
+
+    /* ── Initial render ───────────────────────────── */
+    renderOverview();
+  </script>
+
+</body>
+</html>
